@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Xposed Custom Error</string>
+    <string name="xposeddescription">Custom app not responding / crash error dialog text and sound effects</string>    
+    <string name="chooser_title">Select audio file</string>
+
+</resources>

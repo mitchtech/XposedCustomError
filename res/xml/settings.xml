@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="prefEnableAppError"
+            android:title="Custom Crash Text" 
+            android:summary="Enable custom message for app/process crash"/>
+        
+        <EditTextPreference 
+            android:key="prefAppErrorMsg" 
+            android:title="App Crash Error Message" 
+            android:dialogTitle="App Crash Error Message"
+            android:dependency="prefEnableAppError"
+            android:defaultValue="Unfortunately, %1$s has stopped."
+            android:dialogMessage="Enter text to be displayed in place of default app crash error message. To include the name of the not responding/crashed app in your custom error dialog, use %1$s (percent sign, number 1, dollar sign, lowercase s). Change requires soft reboot to activate." />
+
+        <SwitchPreference
+           android:defaultValue="true"
+           android:key="prefEnableAnrError"
+           android:title="Custom ANR Text" 
+           android:summary="Enable custom message for app not responding"/>
+       
+       <EditTextPreference 
+           android:key="prefAnrErrorMsg" 
+           android:title="App Not Responding Message" 
+           android:dialogTitle="App Not Responding Message"
+           android:dependency="prefEnableAnrError"
+           android:defaultValue="%1$s isn\'t responding.\n\nDo you want to close it?"
+           android:dialogMessage="Enter text to be displayed in place of default system app not responding message. To include the name of the not responding/crashed app in your custom error dialog, use %1$s (percent sign, number 1, dollar sign, lowercase s). Change requires soft reboot to activate." />
+
+       <SwitchPreference
+           android:defaultValue="false"
+           android:key="prefEnableSoundFx"
+           android:title="Enable SoundFX" 
+           android:summary="Play selected sound effect on app crash"/>
+       
+       <Preference
+           android:key="prefSoundFile"
+           android:title="Select audio file" 
+           android:dependency="prefEnableSoundFx"
+           android:summary="&lt; select audio file &gt;"/>
+      
+       <Preference
+           android:key="prefTestSound"
+           android:title="Test sound" 
+           android:dependency="prefEnableSoundFx"
+           android:summary="Click here to test selected sound effect"/>
+       
+       <Preference
+           android:key="prefTestCrash"
+           android:title="Crash app" 
+           android:summary="Click here to crash app and test error pop-up"/>
+
+</PreferenceScreen>
