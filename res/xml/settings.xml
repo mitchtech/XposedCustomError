@@ -49,7 +49,7 @@
        
        <Preference
            android:key="prefTestCrash"
-           android:title="Crash app" 
+           android:title="Test crash app" 
            android:summary="Click here to crash app and test error pop-up"/>
 
 </PreferenceScreen>
