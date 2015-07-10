@@ -1,8 +1,6 @@
 
 package net.mitchtech.xposed;
 
-import static de.robv.android.xposed.XposedHelpers.findAndHookConstructor;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.XResources;
@@ -11,6 +9,8 @@ import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
+
+import static de.robv.android.xposed.XposedHelpers.findAndHookConstructor;
 
 public class XposedCustomError implements IXposedHookZygoteInit {
 
