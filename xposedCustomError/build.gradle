@@ -31,4 +31,5 @@ dependencies {
     compile 'com.jenzz:materialpreference:1.3'
     compile 'com.afollestad:material-dialogs:0.7.6.0'
     compile 'com.infstory:switch-preference-compat:1.0.0'
+    compile 'com.tsengvn:Typekit:1.0.0'
 }

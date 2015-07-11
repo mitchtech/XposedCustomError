@@ -21,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.ipaulpro.afilechooser.utils.FileUtils;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import net.mitchtech.xposed.customerror.R;
 
@@ -149,6 +150,11 @@ public class CustomErrorPreferenceActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 
     private void showChooser() {

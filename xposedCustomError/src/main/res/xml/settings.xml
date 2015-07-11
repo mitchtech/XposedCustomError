@@ -35,19 +35,19 @@
         android:title="Enable SoundFX"
         android:summary="Play selected sound effect on app crash"/>
 
-    <com.jenzz.materialpreference.Preference
+    <Preference
         android:key="prefSoundFile"
         android:title="Select audio file"
         android:dependency="prefEnableSoundFx"
         android:summary="&lt; select audio file &gt;"/>
 
-    <com.jenzz.materialpreference.Preference
+    <Preference
         android:key="prefTestSound"
         android:title="Test sound"
         android:dependency="prefEnableSoundFx"
         android:summary="Click here to test selected sound effect"/>
 
-    <com.jenzz.materialpreference.Preference
+    <Preference
         android:key="prefTestCrash"
         android:title="Test crash app"
         android:summary="Click here to crash app and test error pop-up"/>

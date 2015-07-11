@@ -8,7 +8,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppThemeLight">
+        android:theme="@style/AppThemeLight"
+        android:name="net.mitchtech.xposed.CustomErrorApplication">
         <meta-data
             android:name="xposedmodule"
             android:value="true" />
