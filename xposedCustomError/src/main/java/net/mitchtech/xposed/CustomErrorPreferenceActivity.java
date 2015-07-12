@@ -16,10 +16,15 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.ipaulpro.afilechooser.utils.FileUtils;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
@@ -35,6 +40,7 @@ public class CustomErrorPreferenceActivity extends AppCompatActivity {
     private static final String TAG = CustomErrorPreferenceActivity.class.getSimpleName();
     private static final String PKG_NAME = "net.mitchtech.xposed.customerror";
     private static final int REQUEST_CODE = 6384; // onActivityResult request
+    SharedPreferences mPrefs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +65,7 @@ public class CustomErrorPreferenceActivity extends AppCompatActivity {
                     .add(android.R.id.content, new SettingsFragment())
                     .commit();
         }
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
     }
 
 
@@ -70,6 +77,26 @@ public class CustomErrorPreferenceActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             getPreferenceManager().setSharedPreferencesMode(Context.MODE_WORLD_READABLE);
             addPreferencesFromResource(R.xml.settings);
+
+            findPreference("prefAppErrorMsg").setOnPreferenceClickListener(
+                    new OnPreferenceClickListener() {
+
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            showPrefAppErrorMsg();
+                            return false;
+                        }
+                    });
+
+            findPreference("prefAnrErrorMsg").setOnPreferenceClickListener(
+                    new OnPreferenceClickListener() {
+
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            showPrefAppAnrMsg();
+                            return false;
+                        }
+                    });
 
             findPreference("prefSoundFile").setOnPreferenceClickListener(
                     new OnPreferenceClickListener() {
@@ -111,6 +138,7 @@ public class CustomErrorPreferenceActivity extends AppCompatActivity {
         public void onResume() {
             super.onResume();
             getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+            setSoundFxPreferenceSummary();
         }
 
         @Override
@@ -168,6 +196,61 @@ public class CustomErrorPreferenceActivity extends AppCompatActivity {
         } catch (ActivityNotFoundException e) {
             // The reason for the existence of aFileChooser
         }
+    }
+
+    private void showPrefAppErrorMsg() {
+        LayoutInflater factory = LayoutInflater.from(CustomErrorPreferenceActivity.this);
+        View view = factory.inflate(R.layout.dialog_edit_message, null);
+        TextView textView = (TextView) view.findViewById(R.id.description);
+        final EditText editText = (EditText) view.findViewById(R.id.input);
+        textView.setText("Enter text to be displayed in place of default app crash error message." +
+                "\n\nTo include the name of the crashed app in your custom error " +
+                "dialog, use the identifier %1$s (percent sign, number 1, dollar sign, lowercase s). " +
+                "\n\nChange requires soft reboot to activate.");
+        editText.setText(mPrefs.getString("prefAppErrorMsg", "Unfortunately, %1$s has stopped."));
+
+        new MaterialDialog.Builder(CustomErrorPreferenceActivity.this)
+                .title("App Crash Error Message")
+                .customView(view, true)
+                .positiveText("OK")
+                .negativeText("Cancel")
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        String message = editText.getText().toString();
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("prefAppErrorMsg", message);
+                        editor.commit();
+                    }
+                }).show();
+    }
+
+    private void showPrefAppAnrMsg() {
+        LayoutInflater factory = LayoutInflater.from(CustomErrorPreferenceActivity.this);
+        final View view = factory.inflate(R.layout.dialog_edit_message, null);
+        final TextView textView = (TextView) view.findViewById(R.id.description);
+        final EditText editText = (EditText) view.findViewById(R.id.input);
+        textView.setText("Enter text to be displayed in place of default system app not responding message." +
+                "\n\nTo include the name of the not responding app in your custom error dialog, " +
+                "use the identifier %1$s (percent sign, number 1, dollar sign, lowercase s)." +
+                "\n\nChange requires soft reboot to activate.");
+        editText.setText(mPrefs.getString("prefAnrErrorMsg", "%1$s isn\'t responding.\n\nDo you want to close it?"));
+
+        new MaterialDialog.Builder(CustomErrorPreferenceActivity.this)
+                .title("App Not Responding Message")
+                .customView(view, true)
+                .positiveText("OK")
+                .negativeText("Cancel")
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        String message = editText.getText().toString();
+                        SharedPreferences.Editor editor = mPrefs.edit();
+                        editor.putString("prefAnrErrorMsg", message);
+                        editor.commit();
+                    }
+                }).show();
     }
 
     @Override
